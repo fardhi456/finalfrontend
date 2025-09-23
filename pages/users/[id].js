@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
 
@@ -12,32 +12,30 @@ export default function PublicProfile() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (!id) return;
+  const fetchUserAndPosts = useCallback(async () => {
+    try {
+      const userRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/users/public/${id}/`
+      );
+      setUser(userRes.data);
 
-    async function fetchUserAndPosts() {
-      try {
-        // ✅ Fetch public profile
-        const userRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/users/public/${id}/`
-        );
-        setUser(userRes.data);
-
-        // ✅ Fetch posts by user ID
-        const postsRes = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/?author=${id}`
-        );
-        setPosts(postsRes.data);
-      } catch (err) {
-        console.error("Error fetching user profile:", err);
-        setError("User not found or failed to load profile.");
-      } finally {
-        setLoading(false);
-      }
+      const postsRes = await axios.get(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/?author=${id}`
+      );
+      setPosts(postsRes.data);
+    } catch (err) {
+      console.error("Error fetching user profile:", err);
+      setError("User not found or failed to load profile.");
+    } finally {
+      setLoading(false);
     }
-
-    fetchUserAndPosts();
   }, [id]);
+
+  useEffect(() => {
+    if (id) {
+      fetchUserAndPosts();
+    }
+  }, [id, fetchUserAndPosts]);
 
   if (loading) {
     return (
@@ -65,7 +63,7 @@ export default function PublicProfile() {
     <>
       <Navbar />
       <div className="container">
-        <h1>{user?.username}'s Public Profile</h1>
+        <h1>{user?.username}&apos;s Public Profile</h1>
 
         {user?.profile_pic && (
           <img
@@ -75,7 +73,11 @@ export default function PublicProfile() {
           />
         )}
 
-        {user?.bio && <p><strong>Bio:</strong> {user.bio}</p>}
+        {user?.bio && (
+          <p>
+            <strong>Bio:</strong> {user.bio}
+          </p>
+        )}
 
         <h2>Posts by {user?.username}</h2>
         {posts.length === 0 ? (
@@ -127,7 +129,8 @@ export default function PublicProfile() {
           color: red;
         }
 
-        h1, h2 {
+        h1,
+        h2 {
           margin-top: 1rem;
         }
       `}</style>
