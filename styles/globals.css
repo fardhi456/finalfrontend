@@ -1,0 +1,529 @@
+/* ============================ */
+/* Reset + Base */
+/* ============================ */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  padding-top: 70px;
+}
+
+/* ============================ */
+/* Dark Mode */
+/* ============================ */
+
+body.dark {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark .post-card {
+  background-color: #1e1e2f;
+  color: white;
+  border: 1px solid #333;
+}
+
+body.dark .post-card:hover {
+  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.05);
+}
+
+body.dark .link,
+body.dark .logout-btn {
+  color: #f0a500;
+}
+
+body.dark .link:hover,
+body.dark .active {
+  color: #fff;
+}
+
+/* ============================ */
+/* Navbar */
+/* ============================ */
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background-color: #1e1e2f;
+  color: white;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+}
+
+.logo-text {
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #f0a500;
+  cursor: pointer;
+  user-select: none;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.link {
+  color: #0070f3;
+  font-weight: 500;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  user-select: none;
+  text-decoration: none;
+}
+
+.link:hover,
+.active {
+  color: #0045a5;
+}
+
+.logout-btn,
+.dark-toggle {
+  background: none;
+  border: none;
+  color: #f0a500;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 1rem;
+  user-select: none;
+  padding: 0.4rem 0.8rem;
+}
+
+.logout-btn:hover,
+.dark-toggle:hover {
+  color: #fff;
+}
+
+.welcome-msg {
+  margin-right: 1rem;
+  font-weight: 500;
+  color: #f0a500;
+}
+
+/* ============================ */
+/* Hamburger Menu (Mobile) */
+/* ============================ */
+
+.hamburger {
+  display: none;
+  width: 24px;
+  height: 24px;
+  background: url('/hamburger.png') no-repeat center center;
+  background-size: contain;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Mobile menu hidden by default */
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  gap: 1rem;
+  background-color: #1e1e2f;
+  position: fixed;
+  top: 60px;
+  right: 0;
+  width: 200px;
+  padding: 1rem;
+  border-radius: 0 0 0 8px;
+  box-shadow: -2px 2px 8px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+}
+
+.mobile-menu.active {
+  display: flex;
+}
+
+.mobile-menu .link,
+.mobile-menu .logout-btn,
+.mobile-menu .dark-toggle {
+  color: #f0a500;
+  font-weight: 600;
+  font-size: 1.1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  padding: 0;
+}
+
+.mobile-menu .link:hover,
+.mobile-menu .active,
+.mobile-menu .logout-btn:hover,
+.mobile-menu .dark-toggle:hover {
+  color: #fff;
+}
+
+/* ============================ */
+/* Main Layout */
+/* ============================ */
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.container h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #1e1e2f;
+}
+
+/* ============================ */
+/* Post Card */
+/* ============================ */
+
+.post-card {
+  background: white;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
+  transition: box-shadow 0.3s ease;
+}
+
+.post-card:hover {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.post-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0.5rem 0;
+  object-fit: contain;
+}
+
+.button-row {
+  margin-top: 0.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.button-row button,
+.like-btn {
+  padding: 0.4rem 0.8rem;
+  background: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.button-row button:hover,
+.like-btn:hover {
+  background: #ddd;
+}
+
+/* ============================ */
+/* Comments Section */
+/* ============================ */
+
+.comments-section {
+  margin-top: 1rem;
+  border-top: 1px solid #eee;
+  padding-top: 0.5rem;
+}
+
+.comments-section ul {
+  list-style: none;
+  padding-left: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-bottom: 0.5rem;
+}
+
+.comments-section li {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid #eee;
+}
+
+.comments-section textarea {
+  width: 100%;
+  resize: vertical;
+  margin-bottom: 0.3rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.comments-section button {
+  background: #0070f3;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.comments-section button:hover {
+  background: #005bb5;
+}
+
+/* ============================ */
+/* Forms & Auth */
+/* ============================ */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form input[type="text"],
+.form input[type="email"],
+.form input[type="password"],
+.form textarea {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.form input[type="file"] {
+  border: none;
+}
+
+.form button {
+  background-color: #f0a500;
+  color: #fff;
+  border: none;
+  padding: 0.75rem;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.form button:hover {
+  background-color: #d18f00;
+}
+
+.error {
+  color: red;
+}
+
+/* ============================ */
+/* Profile & Saved Posts */
+/* ============================ */
+
+.profile {
+  margin-bottom: 2rem;
+  background: #f5f5f5;
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.saved-posts {
+  padding: 2rem 0;
+}
+
+/* ============================ */
+/* Auth Page (Login/Register) */
+/* ============================ */
+
+.auth-container {
+  max-width: 400px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container h1 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #1e1e2f;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.auth-form input {
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.auth-form button {
+  background-color: #f0a500;
+  color: white;
+  font-weight: bold;
+  padding: 0.75rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #d18f00;
+}
+
+.success-msg {
+  color: green;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.waiting-msg {
+  background: #fff3cd;
+  color: #856404;
+  border: 1px solid #ffeeba;
+  padding: 0.75rem;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
+  font-weight: 500;
+}
+
+.error-msg {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
+  font-weight: 500;
+}
+
+/* ============================ */
+/* Dark Mode Extras */
+/* ============================ */
+
+body.dark .container {
+  background-color: #12121f;
+  color: #eee;
+}
+
+body.dark .container h1,
+body.dark .container h2,
+body.dark .container h3 {
+  color: #eee;
+}
+
+body.dark .profile {
+  background-color: #1e1e2f;
+  color: #eee;
+  border: 1px solid #333;
+}
+
+/* ============================ */
+/* Responsive (Mobile) */
+/* ============================ */
+
+@media (max-width: 600px) {
+  body {
+    padding-top: 60px;
+    font-size: 14px;
+  }
+
+  .navbar {
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-text {
+    font-size: 1.25rem;
+  }
+
+  .links {
+    display: none;
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  .container {
+    margin: 1rem auto;
+    padding: 0 0.75rem;
+    max-width: 100%;
+  }
+
+  .container h1 {
+    font-size: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .post-card {
+    padding: 0.75rem 1rem;
+  }
+
+  .button-row {
+    gap: 0.3rem;
+  }
+
+  .button-row button,
+  .like-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: 0.85rem;
+  }
+
+  .comments-section textarea {
+    font-size: 0.9rem;
+  }
+
+  .comments-section button {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .form input,
+  .form textarea {
+    font-size: 0.9rem;
+    padding: 0.5rem;
+  }
+
+  .form button {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+
+  .profile {
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .auth-container {
+    max-width: 95%;
+    margin: 2rem auto;
+    padding: 1.5rem 1rem;
+  }
+
+  .auth-container h1 {
+    font-size: 1.5rem;
+  }
+
+  .auth-form input {
+    font-size: 0.9rem;
+    padding: 0.6rem;
+  }
+
+  .auth-form button {
+    font-size: 0.95rem;
+    padding: 0.6rem;
+  }
+}
