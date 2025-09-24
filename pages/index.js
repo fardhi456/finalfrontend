@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { formatDistanceToNow } from 'date-fns'; // Import date-fns for relative time
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -162,7 +165,36 @@ export default function Home() {
 
   const formatDate = (isoDate) => {
     const date = new Date(isoDate);
-    return date.toLocaleString();
+    return formatDistanceToNow(date, { addSuffix: true });
+  };
+
+  const handleCopyUserProfile = (userId) => {
+    const profileUrl = `${window.location.origin}/users/${userId}`;
+    navigator.clipboard.writeText(profileUrl).then(() => {
+      toast.success("User profile URL copied!");
+    });
+  };
+
+  const handleCopyImage = (postId) => {
+    const post = posts.find((p) => p.id === postId);
+    if (post.image) {
+      navigator.clipboard.writeText(post.image).then(() => {
+        toast.success("Image URL copied!");
+      });
+    } else {
+      toast.error("No image available to copy.");
+    }
+  };
+
+  const handleCopyText = (postId) => {
+    const post = posts.find((p) => p.id === postId);
+    if (post.content) {
+      navigator.clipboard.writeText(post.content).then(() => {
+        toast.success("Text copied!");
+      });
+    } else {
+      toast.error("No text available to copy.");
+    }
   };
 
   return (
@@ -193,21 +225,58 @@ export default function Home() {
             {post.image && <img src={post.image} alt="Post" className="post-image" />}
             <p>{post.content}</p>
 
-            <button className="like-btn" onClick={() => handleLike(post.id)}>
-              {post.liked_by_user ? "💖" : "🤍"} {post.likes_count}
-            </button>
-
             <div className="button-row">
-              <button onClick={() => toggleComments(post.id)}>💬 Comment</button>
-              <button onClick={() => handleSave(post.id)}>🔖 Save</button>
+              <button
+                className="like-btn"
+                onClick={() => handleLike(post.id)}
+              >
+                {post.liked_by_user ? "💖" : "🤍"} {post.likes_count}
+              </button>
+              <button
+                className="comment-btn"
+                onClick={() => toggleComments(post.id)}
+              >
+                💬 Comment
+              </button>
+              <button
+                className="save-btn"
+                onClick={() => handleSave(post.id)}
+              >
+                🔖 Save
+              </button>
+
               {currentUserId === post.author.id && (
                 <>
                   <Link href={`/edit/${post.id}`}>
-                    <button>✏️ Edit</button>
+                    <button className="edit-btn">✏️ Edit</button>
                   </Link>
-                  <button onClick={() => handleDelete(post.id)}>🗑️ Delete</button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => handleDelete(post.id)}
+                  >
+                    🗑️ Delete
+                  </button>
                 </>
               )}
+
+              <button
+                className="copy-btn"
+                onClick={() => handleCopyUserProfile(post.author.id)}
+              >
+                👤 Copy User Profile
+              </button>
+              <button
+                className="copy-btn"
+                onClick={() => handleCopyImage(post.id)}
+              >
+                📷 Copy Image URL
+              </button>
+              <button
+                className="copy-btn"
+                onClick={() => handleCopyText(post.id)}
+              >
+                📋 Copy Text
+              </button>
             </div>
 
             {openComments[post.id] && (
@@ -231,28 +300,93 @@ export default function Home() {
                   value={newComment[post.id] || ""}
                   onChange={(e) => handleCommentChange(post.id, e.target.value)}
                 />
-                <button onClick={() => handleCommentSubmit(post.id)}>Post Comment</button>
+                <button
+                  className="comment-submit-btn"
+                  onClick={() => handleCommentSubmit(post.id)}
+                >
+                  Post Comment
+                </button>
               </section>
             )}
           </article>
         ))}
       </main>
 
+      <ToastContainer />
+
       <style jsx>{`
         .post-card {
-          border: 1px solid #eee;
-          padding: 1rem;
-          margin-bottom: 1.5rem;
-          border-radius: 8px;
+          background-color: #ffffff;
+          border: 1px solid #ddd;
+          padding: 1.5rem;
+          margin-bottom: 2rem;
+          border-radius: 10px;
+          transition: background-color 0.3s ease, transform 0.3s ease;
+          color: #222;
+          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .post-card:hover {
+          background-color: #fff7e6; /* Light cream on hover */
+          transform: scale(1.01);
+        }
+
+        /* Dark Mode */
+        @media (prefers-color-scheme: dark) {
+          .post-card {
+            background-color: #333;
+            color: #f0f0f0;
+            border-color: #555;
+            box-shadow: none;
+          }
+
+          .post-card:hover {
+            background-color: #444;
+            transform: scale(1.01);
+          }
+
+          .author-box {
+            color: #ccc;
+          }
+
+          .post-time {
+            color: #aaa;
+          }
+
+          .button-row button {
+            background: #d18f00;
+          }
+
+          .button-row button:hover {
+            background-color: #c07800;
+          }
+
+          .comments-section {
+            background-color: #444;
+          }
+
+          .comments-section textarea {
+            background-color: #555;
+            color: white;
+            border: 1px solid #666;
+          }
+
+          .comments-section button {
+            background-color: #28a745;
+          }
+
+          .comments-section button:hover {
+            background-color: #218838;
+          }
         }
 
         .author-box {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          margin-bottom: 0.5rem;
-          font-size: 0.95rem;
-          color: #555;
+          gap: 0.75rem;
+          margin-bottom: 0.75rem;
+          font-size: 1rem;
+          color: #444;
         }
 
         .author-link {
@@ -264,50 +398,67 @@ export default function Home() {
         }
 
         .author-avatar {
-          width: 36px;
-          height: 36px;
+          width: 40px;
+          height: 40px;
           object-fit: cover;
           border-radius: 50%;
           margin-right: 0.5rem;
         }
 
         .post-time {
-          color: #777;
-          font-size: 0.85rem;
+          color: white;
+          font-size: 0.9rem;
         }
 
-        .like-btn,
-        .button-row button {
-          padding: 0.4rem 0.8rem;
-          background: #f0f0f0;
-          border: 1px solid #ccc;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: 0.2s;
-        }
-
-        .like-btn:hover,
-        .button-row button:hover {
-          background: #ddd;
-        }
-
-        .button-row {
-          margin-top: 0.5rem;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
+        h2 {
+          font-size: 1.5rem;
+          margin-top: 1rem;
+          margin-bottom: 0.75rem;
         }
 
         .post-image {
           max-width: 100%;
           height: auto;
-          margin: 0.5rem 0;
+          margin-bottom: 1rem;
+          border-radius: 8px;
+        }
+
+        .button-row {
+          margin-top: 1rem;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.75rem;
+        }
+
+        .button-row button {
+          padding: 0.6rem 1.2rem;
+          background: #d18f00;
+          color: white;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: 500;
+          transition: background-color 0.3s;
+        }
+
+        .button-row button:hover {
+          background-color: #c07800;
+        }
+
+        .comment-submit-btn {
+          background-color: #28a745;
+          color: white;
+          border-radius: 5px;
+        }
+
+        .comment-submit-btn:hover {
+          background-color: #218838;
         }
 
         .comments-section {
-          margin-top: 1rem;
-          border-top: 1px solid #eee;
-          padding-top: 0.5rem;
+          margin-top: 1.5rem;
+          padding-top: 1rem;
+          border-top: 1px solid #ddd;
         }
 
         .comments-section ul {
@@ -315,7 +466,7 @@ export default function Home() {
           padding-left: 0;
           max-height: 200px;
           overflow-y: auto;
-          margin-bottom: 0.5rem;
+          margin-bottom: 1rem;
         }
 
         .comments-section li {
@@ -326,26 +477,30 @@ export default function Home() {
         .comments-section textarea {
           width: 100%;
           resize: vertical;
-          margin-bottom: 0.3rem;
-          padding: 0.5rem;
-          border: 1px solid #ccc;
-          border-radius: 4px;
+          margin-bottom: 0.5rem;
+          padding: 0.8rem;
+          border-radius: 5px;
+          border: 1px solid #ddd;
+          background-color: #f9f9f9;
+          font-size: 1rem;
+          color: #222;
         }
 
         .comments-section button {
-          background: #0070f3;
-          color: white;
-          border: none;
-          padding: 0.5rem 1rem;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: 0.2s;
+          padding: 0.6rem 1.5rem;
         }
 
-        .comments-section button:hover {
-          background: #005bb5;
+        @media (max-width: 600px) {
+          .button-row {
+            gap: 0.5rem;
+          }
+
+          .comments-section button {
+            width: 100%;
+          }
         }
       `}</style>
+
     </>
   );
 }

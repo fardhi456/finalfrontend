@@ -1,7 +1,6 @@
 /* ============================ */
 /* Reset + Base */
 /* ============================ */
-
 * {
   margin: 0;
   padding: 0;
@@ -9,17 +8,17 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
-    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  background-color: #f9f9f9;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f7fa;
   color: #333;
   padding-top: 70px;
+  line-height: 1.6;
+  transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* ============================ */
 /* Dark Mode */
 /* ============================ */
-
 body.dark {
   background-color: #121212;
   color: #eee;
@@ -32,7 +31,7 @@ body.dark .post-card {
 }
 
 body.dark .post-card:hover {
-  box-shadow: 0 6px 16px rgba(255, 255, 255, 0.05);
+  box-shadow: 0 8px 20px rgba(255, 255, 255, 0.05);
 }
 
 body.dark .link,
@@ -42,18 +41,17 @@ body.dark .logout-btn {
 
 body.dark .link:hover,
 body.dark .active {
-  color: #fff;
+  color: #ffffff;
 }
 
 /* ============================ */
 /* Navbar */
 /* ============================ */
-
 .navbar {
   display: flex;
   justify-content: space-between;
   padding: 1rem 2rem;
-  background-color: #1e1e2f;
+  background: linear-gradient(90deg, #1e1e2f 0%, #252540 100%);
   color: white;
   align-items: center;
   position: fixed;
@@ -61,24 +59,26 @@ body.dark .active {
   left: 0;
   right: 0;
   z-index: 999;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .logo-text {
   font-weight: 700;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   color: #f0a500;
   cursor: pointer;
   user-select: none;
+  letter-spacing: 1px;
 }
 
 .links {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .link {
-  color: #0070f3;
+  color: #61dafb;
   font-weight: 500;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -88,24 +88,32 @@ body.dark .active {
 
 .link:hover,
 .active {
-  color: #0045a5;
+  color: #1da1f2;
+  text-decoration: underline;
 }
 
 .logout-btn,
 .dark-toggle {
-  background: none;
+  background: #f0a500;
   border: none;
-  color: #f0a500;
+  color: white;
   font-weight: 600;
   cursor: pointer;
   font-size: 1rem;
   user-select: none;
   padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  transition: background 0.3s ease;
 }
 
 .logout-btn:hover,
 .dark-toggle:hover {
-  color: #fff;
+  background-color: #d18f00;
+}
+
+body.dark .logout-btn {
+  background-color: #d18f00; /* Adjusted for better contrast in dark mode */
+  color: #121212; /* Darker text for contrast */
 }
 
 .welcome-msg {
@@ -117,7 +125,6 @@ body.dark .active {
 /* ============================ */
 /* Hamburger Menu (Mobile) */
 /* ============================ */
-
 .hamburger {
   display: none;
   width: 24px;
@@ -128,7 +135,6 @@ body.dark .active {
   user-select: none;
 }
 
-/* Mobile menu hidden by default */
 .mobile-menu {
   display: none;
   flex-direction: column;
@@ -165,13 +171,12 @@ body.dark .active {
 .mobile-menu .active,
 .mobile-menu .logout-btn:hover,
 .mobile-menu .dark-toggle:hover {
-  color: #fff;
+  color: #ffffff;
 }
 
 /* ============================ */
 /* Main Layout */
 /* ============================ */
-
 .container {
   max-width: 900px;
   margin: 2rem auto;
@@ -182,66 +187,66 @@ body.dark .active {
   text-align: center;
   margin-bottom: 2rem;
   color: #1e1e2f;
+  font-size: 2.2rem;
 }
 
 /* ============================ */
 /* Post Card */
 /* ============================ */
-
 .post-card {
   background: white;
-  padding: 1rem 1.5rem;
+  padding: 1.5rem 2rem;
   margin-bottom: 1.5rem;
-  border-radius: 8px;
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
-  border: 1px solid #ddd;
-  transition: box-shadow 0.3s ease;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e2e8f0;
+  transition: 0.3s ease;
 }
 
 .post-card:hover {
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
 }
 
 .post-image {
   max-width: 100%;
   height: auto;
-  border-radius: 6px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
   display: block;
-  margin: 0.5rem 0;
+  margin: 0.75rem 0;
   object-fit: contain;
 }
 
 .button-row {
-  margin-top: 0.5rem;
+  margin-top: 0.75rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .button-row button,
 .like-btn {
-  padding: 0.4rem 0.8rem;
-  background: #f0f0f0;
+  padding: 0.45rem 1rem;
+  background: #f3f4f6;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.2s;
+  font-weight: 500;
 }
 
 .button-row button:hover,
 .like-btn:hover {
-  background: #ddd;
+  background: #e2e8f0;
 }
 
 /* ============================ */
 /* Comments Section */
 /* ============================ */
-
 .comments-section {
-  margin-top: 1rem;
+  margin-top: 1.2rem;
   border-top: 1px solid #eee;
-  padding-top: 0.5rem;
+  padding-top: 0.75rem;
 }
 
 .comments-section ul {
@@ -249,29 +254,29 @@ body.dark .active {
   padding-left: 0;
   max-height: 200px;
   overflow-y: auto;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .comments-section li {
-  padding: 0.25rem 0;
-  border-bottom: 1px solid #eee;
+  padding: 0.3rem 0;
+  border-bottom: 1px solid #f0f0f0;
 }
 
 .comments-section textarea {
   width: 100%;
   resize: vertical;
-  margin-bottom: 0.3rem;
-  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+  padding: 0.6rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .comments-section button {
   background: #0070f3;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
+  padding: 0.6rem 1.2rem;
+  border-radius: 6px;
   cursor: pointer;
   transition: 0.2s;
 }
@@ -283,7 +288,6 @@ body.dark .active {
 /* ============================ */
 /* Forms & Auth */
 /* ============================ */
-
 .form {
   display: flex;
   flex-direction: column;
@@ -297,7 +301,7 @@ body.dark .active {
   padding: 0.75rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .form input[type="file"] {
@@ -312,7 +316,8 @@ body.dark .active {
   font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  border-radius: 4px;
+  border-radius: 6px;
+  transition: background 0.3s ease;
 }
 
 .form button:hover {
@@ -326,12 +331,12 @@ body.dark .active {
 /* ============================ */
 /* Profile & Saved Posts */
 /* ============================ */
-
 .profile {
   margin-bottom: 2rem;
   background: #f5f5f5;
-  padding: 1rem;
-  border-radius: 6px;
+  padding: 1.25rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .saved-posts {
@@ -341,14 +346,13 @@ body.dark .active {
 /* ============================ */
 /* Auth Page (Login/Register) */
 /* ============================ */
-
 .auth-container {
-  max-width: 400px;
+  max-width: 420px;
   margin: 3rem auto;
   padding: 2rem;
   background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
 .auth-container h1 {
@@ -360,14 +364,14 @@ body.dark .active {
 .auth-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.2rem;
 }
 
 .auth-form input {
   padding: 0.75rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
 .auth-form button {
@@ -377,8 +381,9 @@ body.dark .active {
   padding: 0.75rem;
   font-size: 1rem;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background 0.3s ease;
 }
 
 .auth-form button:hover {
@@ -413,7 +418,6 @@ body.dark .active {
 /* ============================ */
 /* Dark Mode Extras */
 /* ============================ */
-
 body.dark .container {
   background-color: #12121f;
   color: #eee;
@@ -434,7 +438,6 @@ body.dark .profile {
 /* ============================ */
 /* Responsive (Mobile) */
 /* ============================ */
-
 @media (max-width: 600px) {
   body {
     padding-top: 60px;
@@ -469,17 +472,17 @@ body.dark .profile {
   }
 
   .post-card {
-    padding: 0.75rem 1rem;
+    padding: 1rem;
   }
 
   .button-row {
-    gap: 0.3rem;
+    gap: 0.5rem;
   }
 
   .button-row button,
   .like-btn {
-    padding: 0.3rem 0.6rem;
-    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    font-size: 0.9rem;
   }
 
   .comments-section textarea {
@@ -487,23 +490,23 @@ body.dark .profile {
   }
 
   .comments-section button {
-    padding: 0.4rem 0.8rem;
+    padding: 0.5rem 1rem;
     font-size: 0.9rem;
   }
 
   .form input,
   .form textarea {
-    font-size: 0.9rem;
-    padding: 0.5rem;
-  }
-
-  .form button {
     font-size: 0.95rem;
     padding: 0.6rem;
   }
 
+  .form button {
+    font-size: 1rem;
+    padding: 0.7rem;
+  }
+
   .profile {
-    padding: 0.75rem;
+    padding: 0.8rem;
     margin-bottom: 1.5rem;
   }
 
@@ -514,16 +517,159 @@ body.dark .profile {
   }
 
   .auth-container h1 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   .auth-form input {
-    font-size: 0.9rem;
+    font-size: 1rem;
     padding: 0.6rem;
   }
 
   .auth-form button {
-    font-size: 0.95rem;
+    font-size: 1rem;
     padding: 0.6rem;
+  }
+}
+
+/* ============================ */
+/* User Avatar */
+/* ============================ */
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #f0a500;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.avatar:hover {
+  transform: scale(1.05);
+}
+
+body.dark .avatar {
+  border-color: #ffffff;
+}
+
+.mobile-menu .avatar {
+  width: 36px;
+  height: 36px;
+  border: 2px solid #f0a500;
+  align-self: flex-start;
+}
+
+/* styles/about.css or in your global.css */
+
+/* ============================ */
+/* General Styling for About Page */
+/* ============================ */
+
+.about-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem 1rem;
+  font-family: 'Inter', sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.about-content {
+  background-color: #fff;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.about-title {
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #333;
+}
+
+.about-section {
+  margin-bottom: 2rem;
+}
+
+.about-section h2 {
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.5rem;
+}
+
+.about-section p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #444;
+}
+
+.about-list {
+  list-style: none;
+  padding-left: 0;
+  font-size: 1rem;
+}
+
+.about-list li {
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+/* ============================ */
+/* Dark Mode Styling for About Page */
+/* ============================ */
+
+body.dark .about-container {
+  background-color: #121212;
+  color: #eee;
+}
+
+body.dark .about-content {
+  background-color: #1e1e2f;
+  color: #eee;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+body.dark .about-title {
+  color: #f0a500;
+}
+
+body.dark .about-section h2 {
+  color: #f0a500;
+}
+
+body.dark .about-section p,
+body.dark .about-list li {
+  color: #ccc;
+}
+
+body.dark .about-list li {
+  margin-bottom: 0.5rem;
+  color: #ddd;
+}
+
+/* ============================ */
+/* Responsive Design */
+/* ============================ */
+@media (max-width: 600px) {
+  .about-container {
+    margin: 1rem auto;
+    padding: 1rem;
+  }
+
+  .about-title {
+    font-size: 1.5rem;
+  }
+
+  .about-section h2 {
+    font-size: 1.2rem;
+  }
+
+  .about-section p {
+    font-size: 0.95rem;
+  }
+
+  .about-list li {
+    font-size: 0.95rem;
   }
 }

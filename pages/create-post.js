@@ -4,12 +4,33 @@ import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 
 export default function CreatePost() {
+  const router = useRouter();
+  const { type, image: queryImage } = router.query;
+
   const [form, setForm] = useState({ title: "", content: "", image: null });
   const [error, setError] = useState("");
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const router = useRouter();
+  const [decodedImage, setDecodedImage] = useState(null); // New state to hold the decoded image URL
+
+  useEffect(() => {
+    // If no local image file selected yet but query param image exists,
+    // use that as preview image
+    if (!form.image && queryImage) {
+      try {
+        const decoded = decodeURIComponent(queryImage);
+        setDecodedImage(decoded); // Set the decoded URL in state
+        setImagePreview(decoded); // Set the preview
+        setForm((prev) => ({
+          ...prev,
+          image: decoded, // Use decoded image URL as a mock image (for validation)
+        }));
+      } catch {
+        // ignore decoding errors
+      }
+    }
+  }, [queryImage, form.image]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -17,7 +38,6 @@ export default function CreatePost() {
       const file = files[0];
       setForm({ ...form, image: file });
 
-      // Generate preview URL for image
       if (file) {
         const previewUrl = URL.createObjectURL(file);
         setImagePreview(previewUrl);
@@ -29,33 +49,43 @@ export default function CreatePost() {
     }
   };
 
-  // Clean up object URL when component unmounts or image changes
   useEffect(() => {
     return () => {
-      if (imagePreview) {
+      if (imagePreview && form.image) {
         URL.revokeObjectURL(imagePreview);
       }
     };
-  }, [imagePreview]);
+  }, [imagePreview, form.image]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("auth_token");
     if (!token) {
       setError("You must be logged in to create a post.");
       return;
     }
 
-    if (!form.title || !form.content) {
-      setError("Title and content are required.");
+    if (!form.title.trim()) {
+      setError("Title is required.");
+      return;
+    }
+
+    if ((type === "writing" || type === "both") && !form.content.trim()) {
+      setError("Content is required for this post type.");
+      return;
+    }
+
+    if ((type === "artwork" || type === "both") && !form.image) {
+      setError("An image is required for this post type.");
       return;
     }
 
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("content", form.content);
-    if (form.image) {
+    
+    // Only append image if it's a file, not a URL
+    if (form.image && form.image !== decodedImage) {
       formData.append("image", form.image);
     }
 
@@ -97,6 +127,7 @@ export default function CreatePost() {
       <div className="container">
         <h1>Create New Post</h1>
         <form onSubmit={handleSubmit} className="form">
+          {/* Title */}
           <input
             type="text"
             name="title"
@@ -105,23 +136,35 @@ export default function CreatePost() {
             onChange={handleChange}
             required
           />
-          <textarea
-            name="content"
-            placeholder="Write your content here..."
-            value={form.content}
-            onChange={handleChange}
-            required
-          />
-          <input type="file" name="image" accept="image/*" onChange={handleChange} />
 
-          {/* Image Preview */}
-          {imagePreview && (
-            <div className="image-preview">
-              <img src={imagePreview} alt="Selected Preview" />
-            </div>
+          {/* Content */}
+          {(type === "writing" || type === "both") && (
+            <textarea
+              name="content"
+              placeholder="Write your content here..."
+              value={form.content}
+              onChange={handleChange}
+              required
+            />
           )}
 
-          {/* Upload Progress Indicator */}
+          {/* Image */}
+          {(type === "artwork" || type === "both") && (
+            <>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleChange}
+              />
+              {imagePreview && (
+                <div className="image-preview">
+                  <img src={imagePreview} alt="Selected Preview" />
+                </div>
+              )}
+            </>
+          )}
+
           {uploading && (
             <div className="upload-progress">
               <progress value={uploadProgress} max="100" />
