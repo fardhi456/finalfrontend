@@ -89,11 +89,8 @@ export default function Navbar() {
         </Link>
 
         <Link href="/gallery" passHref>
-          <span onClick={handleLinkClick} className={router.pathname === "/gallery" ? "active link" : "link"}>
-            Gallery
-          </span>
+          <span onClick={handleLinkClick} className={router.pathname === "/gallery" ? "active link" : "link"}>Gallery</span>
         </Link>
-
 
         {isLoggedIn ? (
           <>
@@ -159,8 +156,11 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div className={`mobile-menu${mobileMenuOpen ? " active" : ""}`} aria-hidden={!mobileMenuOpen}>
         {isLoggedIn && <span className="welcome-msg">Hello, {username}</span>}
+        
         <Link href="/" passHref><span onClick={handleLinkClick}>Home</span></Link>
         <Link href="/about" passHref><span onClick={handleLinkClick}>About Us</span></Link>
+        <Link href="/gallery" passHref><span onClick={handleLinkClick}>Gallery</span></Link> {/* ✅ ADDED MISSING GALLERY LINK */}
+
         {isLoggedIn ? (
           <>
             <Link href="/saved" passHref><span onClick={handleLinkClick}>Saved Posts</span></Link>
@@ -181,6 +181,7 @@ export default function Navbar() {
         </button>
       </div>
 
+      {/* Custom dropdown style */}
       <style jsx>{`
         .dropdown {
           position: relative;
@@ -244,7 +245,6 @@ export default function Navbar() {
           background-color: #3a3a3a;
         }
       `}</style>
-
     </nav>
   );
 }
