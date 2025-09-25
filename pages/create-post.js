@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
+import Image from "next/image"; // ✅ Hosting-safe images
 
 export default function CreatePost() {
   const router = useRouter();
@@ -12,7 +13,7 @@ export default function CreatePost() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const [decodedImage, setDecodedImage] = useState(null); // New state to hold the decoded image URL
+  const [decodedImage, setDecodedImage] = useState(null);
 
   useEffect(() => {
     if (!form.image && queryImage) {
@@ -44,7 +45,7 @@ export default function CreatePost() {
 
   useEffect(() => {
     return () => {
-      if (imagePreview && form.image) {
+      if (imagePreview && form.image instanceof File) {
         URL.revokeObjectURL(imagePreview);
       }
     };
@@ -76,7 +77,7 @@ export default function CreatePost() {
     const formData = new FormData();
     formData.append("title", form.title);
     formData.append("content", form.content);
-    if (form.image && form.image !== decodedImage) {
+    if (form.image && form.image instanceof File) {
       formData.append("image", form.image);
     }
 
@@ -172,11 +173,13 @@ export default function CreatePost() {
                 className="w-full text-gray-700 dark:text-gray-300"
               />
               {imagePreview && (
-                <div className="mt-4">
-                  <img
+                <div className="mt-4 w-full max-h-72 relative rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
+                  <Image
                     src={imagePreview}
                     alt="Selected Preview"
-                    className="w-full max-h-72 object-contain rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm"
+                    fill
+                    className="object-contain"
+                    unoptimized={true} // ✅ allow local or dynamic URLs
                   />
                 </div>
               )}

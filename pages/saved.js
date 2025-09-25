@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import Image from "next/image"; // <-- import Next.js Image
 
 export default function SavedPosts() {
   const [savedPostIds, setSavedPostIds] = useState([]);
@@ -27,9 +28,7 @@ export default function SavedPosts() {
     const fetchSavedPosts = async () => {
       setLoading(true);
       try {
-        const res = await axios.get(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/`
-        );
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/`);
         const allPosts = res.data;
 
         const filteredPosts = allPosts.filter((post) =>
@@ -52,6 +51,11 @@ export default function SavedPosts() {
     setSavedPostIds(updated);
     localStorage.setItem("saved_posts", JSON.stringify(updated));
     setSavedPosts(savedPosts.filter((post) => post.id !== postId));
+  };
+
+  const getPostImageUrl = (image) => {
+    if (!image) return null;
+    return image.startsWith("http") ? image : `${process.env.NEXT_PUBLIC_API_URL}${image}`;
   };
 
   if (loading) {
@@ -92,11 +96,14 @@ export default function SavedPosts() {
                 </h2>
 
                 {post.image && (
-                  <img
-                    src={post.image}
-                    alt="Post"
-                    className="rounded-lg mb-4 w-full h-48 object-cover"
-                  />
+                  <div className="relative w-full h-48 mb-4 rounded-lg overflow-hidden">
+                    <Image
+                      src={getPostImageUrl(post.image)}
+                      alt="Post"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
                 )}
 
                 <p className="text-gray-700 dark:text-gray-300 line-clamp-3 mb-3">

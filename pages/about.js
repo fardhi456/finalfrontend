@@ -1,5 +1,6 @@
 // pages/about.js
 import Navbar from "../components/Navbar";
+import Link from "next/link";
 
 export default function About() {
   return (
@@ -75,12 +76,12 @@ export default function About() {
             <p className="text-xl font-semibold mb-4">
               🚀 Ready to share your creativity with the world?
             </p>
-            <a
+            <Link
               href="/register"
               className="inline-block bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-3 px-6 rounded-lg shadow-lg transition-all duration-200 dark:bg-indigo-500 dark:hover:bg-indigo-600"
             >
               Join Campus Creatives Today
-            </a>
+            </Link>
           </div>
         </div>
       </div>

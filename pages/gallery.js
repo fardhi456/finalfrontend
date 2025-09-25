@@ -1,7 +1,7 @@
-// pages/create-post.js
 import { useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import Image from "next/image"; // ✅ Optimized images
 
 export default function Gallery() {
   const [photos, setPhotos] = useState([]);
@@ -59,9 +59,11 @@ export default function Gallery() {
       {selectedImage && (
         <div className="fixed inset-0 bg-black/80 flex justify-center items-center z-50">
           <div className="relative max-w-4xl w-full px-4">
-            <img
+            <Image
               src={selectedImage}
               alt="Full view"
+              width={1920}
+              height={1080}
               className="rounded-lg shadow-lg w-full object-contain max-h-[80vh]"
             />
             <button
@@ -120,10 +122,11 @@ export default function Gallery() {
                   className="relative cursor-pointer group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition"
                   onClick={() => handleImageClick(photo.src.original)}
                 >
-                  <img
+                  <Image
                     src={photo.src.medium}
                     alt={photo.photographer}
-                    loading="lazy"
+                    width={400}
+                    height={300}
                     className="w-full h-60 object-cover rounded-lg transform group-hover:scale-105 transition duration-300"
                   />
                   <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-semibold text-lg transition">

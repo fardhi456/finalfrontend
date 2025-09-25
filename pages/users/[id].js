@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
+import Image from "next/image"; // ✅ Hosting-safe images
 
 export default function PublicProfile() {
   const router = useRouter();
@@ -76,11 +77,15 @@ export default function PublicProfile() {
       <div className="max-w-3xl mx-auto px-4 py-10">
         {/* Profile Section */}
         <div className="flex flex-col items-center text-center">
-          <img
-            src={profilePic}
-            alt={`${user.username}'s profile`}
-            className="w-32 h-32 sm:w-36 sm:h-36 rounded-full object-cover mb-4 shadow-lg border-2 border-gray-300 dark:border-gray-600"
-          />
+          <div className="relative w-32 h-32 sm:w-36 sm:h-36 mb-4">
+            <Image
+              src={profilePic}
+              alt={`${user.username}'s profile`}
+              fill
+              className="rounded-full object-cover shadow-lg border-2 border-gray-300 dark:border-gray-600"
+              unoptimized={true} // ✅ For hosting-safe dynamic images
+            />
+          </div>
           <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100 mb-2">
             {user?.username}&apos;s Public Profile
           </h1>
@@ -111,11 +116,19 @@ export default function PublicProfile() {
                   {post.title}
                 </h3>
                 {post.image && (
-                  <img
-                    src={post.image.startsWith("http") ? post.image : `${process.env.NEXT_PUBLIC_API_URL}${post.image}`}
-                    alt="Post"
-                    className="w-full h-48 sm:h-56 object-cover rounded-lg mb-3"
-                  />
+                  <div className="relative w-full h-48 sm:h-56 mb-3 rounded-lg overflow-hidden">
+                    <Image
+                      src={
+                        post.image.startsWith("http")
+                          ? post.image
+                          : `${process.env.NEXT_PUBLIC_API_URL}${post.image}`
+                      }
+                      alt="Post"
+                      fill
+                      className="object-cover rounded-lg"
+                      unoptimized={true} // ✅ Works for both external and API-hosted images
+                    />
+                  </div>
                 )}
                 <p className="text-gray-700 dark:text-gray-300 mb-2 flex-1">
                   {post.content}

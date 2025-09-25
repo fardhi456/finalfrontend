@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
+import Image from "next/image"; // <-- import Next.js Image component
 
 export default function Profile() {
   const [user, setUser] = useState(null);
@@ -26,9 +27,7 @@ export default function Profile() {
       try {
         const userRes = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/auth/users/me/`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
+          { headers: { Authorization: `Token ${token}` } }
         );
         setUser(userRes.data);
         setUsername(userRes.data.username);
@@ -36,9 +35,7 @@ export default function Profile() {
 
         const postsRes = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/api/posts/?author=${userRes.data.id}`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
+          { headers: { Authorization: `Token ${token}` } }
         );
         setPosts(postsRes.data);
       } catch (err) {
@@ -61,9 +58,7 @@ export default function Profile() {
     const formData = new FormData();
     formData.append("username", username);
     formData.append("bio", bio);
-    if (profilePicFile) {
-      formData.append("avatar", profilePicFile);
-    }
+    if (profilePicFile) formData.append("avatar", profilePicFile);
 
     try {
       const res = await axios.patch(
@@ -92,6 +87,11 @@ export default function Profile() {
     return avatar.startsWith("http")
       ? avatar
       : `${process.env.NEXT_PUBLIC_API_URL}${avatar}`;
+  };
+
+  const getPostImageUrl = (image) => {
+    if (!image) return null;
+    return image.startsWith("http") ? image : `${process.env.NEXT_PUBLIC_API_URL}${image}`;
   };
 
   if (loading) {
@@ -126,11 +126,15 @@ export default function Profile() {
 
         {user && (
           <div className="bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 mb-10 flex flex-col items-center md:items-start gap-6">
-            <img
-              src={getAvatarUrl(user.avatar)}
-              alt="Profile"
-              className="w-28 h-28 object-cover rounded-full ring-4 ring-blue-500 shadow-md"
-            />
+            <div className="relative w-28 h-28">
+              <Image
+                src={getAvatarUrl(user.avatar)}
+                alt="Profile"
+                layout="fill"
+                objectFit="cover"
+                className="rounded-full ring-4 ring-blue-500 shadow-md"
+              />
+            </div>
 
             {!editMode ? (
               <div className="w-full space-y-3">
@@ -240,11 +244,14 @@ export default function Profile() {
                   {post.title}
                 </h3>
                 {post.image && (
-                  <img
-                    src={post.image}
-                    alt="Post"
-                    className="rounded-lg mb-3 w-full h-40 object-cover"
-                  />
+                  <div className="relative w-full h-40 mb-3 rounded-lg overflow-hidden">
+                    <Image
+                      src={getPostImageUrl(post.image)}
+                      alt="Post"
+                      layout="fill"
+                      objectFit="cover"
+                    />
+                  </div>
                 )}
                 <p className="text-gray-700 dark:text-gray-300 line-clamp-3 mb-2">
                   {post.content}

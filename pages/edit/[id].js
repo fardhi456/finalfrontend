@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
+import Image from "next/image"; // ✅ Hosting-safe images
 
 export default function EditPost() {
   const router = useRouter();
@@ -192,7 +193,7 @@ export default function EditPost() {
           {(type === "writing" || type === "both") && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                Content 
+                Content
               </label>
               <textarea
                 name="content"
@@ -209,7 +210,7 @@ export default function EditPost() {
           {(type === "artwork" || type === "both") && (
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                Upload new image 
+                Upload new image
               </label>
               <input
                 type="file"
@@ -226,11 +227,13 @@ export default function EditPost() {
                 "
               />
               {imagePreview && (
-                <div className="mt-4">
-                  <img
+                <div className="mt-4 w-full max-h-64 relative rounded-lg border dark:border-gray-700 shadow-md overflow-hidden">
+                  <Image
                     src={imagePreview}
                     alt="Preview"
-                    className="max-h-64 rounded-lg border dark:border-gray-700 shadow-md mx-auto"
+                    fill
+                    className="object-contain"
+                    unoptimized={true} // ✅ Works with blob or external URLs
                   />
                 </div>
               )}

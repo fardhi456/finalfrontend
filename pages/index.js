@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
 import Link from "next/link";
+import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { formatDistanceToNow } from "date-fns";
@@ -12,6 +13,27 @@ export default function Home() {
   const [comments, setComments] = useState({});
   const [newComment, setNewComment] = useState({});
   const [openComments, setOpenComments] = useState({});
+
+  // ✅ Fetch posts function wrapped with useCallback
+  const fetchPosts = useCallback(async (token) => {
+    try {
+      const headers = token ? { Authorization: `Token ${token}` } : {};
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/`, { headers });
+      setPosts(res.data);
+      res.data.forEach((post) => fetchComments(post.id));
+    } catch (err) {
+      console.error(err);
+    }
+  }, []);
+
+  const fetchComments = async (postId) => {
+    try {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/comments/`);
+      setComments((prev) => ({ ...prev, [postId]: res.data }));
+    } catch (err) {
+      console.error("Failed to fetch comments for post", postId, err);
+    }
+  };
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
@@ -26,38 +48,10 @@ export default function Home() {
     }
 
     fetchPosts(token);
-  }, []);
-
-  const fetchPosts = async (token) => {
-    try {
-      const headers = token ? { Authorization: `Token ${token}` } : {};
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/`,
-        { headers }
-      );
-      setPosts(res.data);
-      res.data.forEach((post) => fetchComments(post.id));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const fetchComments = async (postId) => {
-    try {
-      const res = await axios.get(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/comments/`
-      );
-      setComments((prev) => ({ ...prev, [postId]: res.data }));
-    } catch (err) {
-      console.error("Failed to fetch comments for post", postId, err);
-    }
-  };
+  }, [fetchPosts]); // ✅ Added fetchPosts to dependency array
 
   const toggleComments = (postId) => {
-    setOpenComments((prev) => ({
-      ...prev,
-      [postId]: !prev[postId],
-    }));
+    setOpenComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
   };
 
   const handleLike = async (postId) => {
@@ -69,12 +63,9 @@ export default function Home() {
 
     try {
       if (userLiked) {
-        await axios.delete(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`,
-          {
-            headers: { Authorization: `Token ${token}` },
-          }
-        );
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`, {
+          headers: { Authorization: `Token ${token}` },
+        });
       } else {
         await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`,
@@ -106,12 +97,9 @@ export default function Home() {
     if (!confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.delete(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/`,
-        {
-          headers: { Authorization: `Token ${token}` },
-        }
-      );
+      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/`, {
+        headers: { Authorization: `Token ${token}` },
+      });
 
       setPosts(posts.filter((post) => post.id !== postId));
       setComments((prev) => {
@@ -176,17 +164,13 @@ export default function Home() {
 
   const handleCopyUserProfile = (userId) => {
     const profileUrl = `${window.location.origin}/users/${userId}`;
-    navigator.clipboard.writeText(profileUrl).then(() => {
-      toast.success("User profile URL copied!");
-    });
+    navigator.clipboard.writeText(profileUrl).then(() => toast.success("User profile URL copied!"));
   };
 
   const handleCopyImage = (postId) => {
     const post = posts.find((p) => p.id === postId);
     if (post.image) {
-      navigator.clipboard.writeText(post.image).then(() => {
-        toast.success("Image URL copied!");
-      });
+      navigator.clipboard.writeText(post.image).then(() => toast.success("Image URL copied!"));
     } else {
       toast.error("No image available to copy.");
     }
@@ -195,9 +179,7 @@ export default function Home() {
   const handleCopyText = (postId) => {
     const post = posts.find((p) => p.id === postId);
     if (post.content) {
-      navigator.clipboard.writeText(post.content).then(() => {
-        toast.success("Text copied!");
-      });
+      navigator.clipboard.writeText(post.content).then(() => toast.success("Text copied!"));
     } else {
       toast.error("No text available to copy.");
     }
@@ -223,11 +205,14 @@ export default function Home() {
             {/* Author */}
             <div className="flex items-center justify-between mb-4">
               <Link href={`/users/${post.author.id}`} className="flex items-center gap-3">
-                <img
-                  src={getAvatarUrl(post.author.avatar)}
-                  alt="Avatar"
-                  className="w-10 h-10 rounded-full object-cover"
-                />
+                <div className="relative w-10 h-10 rounded-full overflow-hidden">
+                  <Image
+                    src={getAvatarUrl(post.author.avatar)}
+                    alt="Avatar"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
                 <span className="font-semibold text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400">
                   {post.author.username}
                 </span>
@@ -244,11 +229,14 @@ export default function Home() {
 
             {/* Image */}
             {post.image && (
-              <img
-                src={post.image}
-                alt="Post"
-                className="w-full rounded-xl mb-4 shadow-sm"
-              />
+              <div className="relative w-full h-64 mb-4 rounded-xl overflow-hidden shadow-sm">
+                <Image
+                  src={post.image}
+                  alt="Post"
+                  fill
+                  className="object-cover rounded-xl"
+                />
+              </div>
             )}
 
             {/* Content */}

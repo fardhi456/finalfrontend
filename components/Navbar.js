@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image"; // ✅ Added for optimized images
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -62,7 +63,6 @@ export default function Navbar() {
   };
 
   const toggleMobileMenu = () => setMobileMenuOpen((prev) => !prev);
-
   const handleLinkClick = () => {
     setMobileMenuOpen(false);
     setDropdownOpen(false);
@@ -200,10 +200,12 @@ export default function Navbar() {
                   onClick={handleLinkClick}
                   className="ml-2"
                 >
-                  <img
+                  <Image
                     src={avatarUrl}
                     alt="User Avatar"
-                    className="w-9 h-9 rounded-full ring-2 ring-transparent hover:ring-indigo-400 object-cover"
+                    width={36}
+                    height={36}
+                    className="rounded-full ring-2 ring-transparent hover:ring-indigo-400 object-cover"
                   />
                 </Link>
 
@@ -282,106 +284,33 @@ export default function Navbar() {
         <div className="px-4 pt-4 pb-6 space-y-3">
           {isLoggedIn && <p className="text-sm text-gray-700 dark:text-gray-300">Hello, {username}</p>}
 
-          <Link
-            href="/"
-            onClick={handleLinkClick}
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            Home
-          </Link>
-
-          <Link
-            href="/about"
-            onClick={handleLinkClick}
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            About Us
-          </Link>
-
-          <Link
-            href="/gallery"
-            onClick={handleLinkClick}
-            className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-          >
-            Gallery
-          </Link>
+          <Link href="/" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Home</Link>
+          <Link href="/about" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">About Us</Link>
+          <Link href="/gallery" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Gallery</Link>
 
           {isLoggedIn ? (
             <>
-              <Link
-                href="/saved"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                Saved Posts
-              </Link>
+              <Link href="/saved" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Saved Posts</Link>
 
-              <Link
-                href="/create-post?type=artwork"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                🎨 Submit Artwork
-              </Link>
+              <Link href="/create-post?type=artwork" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">🎨 Submit Artwork</Link>
+              <Link href="/create-post?type=writing" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">🖊️ Writing Hub</Link>
+              <Link href="/create-post?type=both" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">📝 Both</Link>
 
-              <Link
-                href="/create-post?type=writing"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                🖊️ Writing Hub
-              </Link>
-
-              <Link
-                href="/create-post?type=both"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                📝 Both
-              </Link>
-
-              <Link
-                href="/profile"
-                onClick={handleLinkClick}
-                className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                <img src={avatarUrl} alt="Avatar" className="w-9 h-9 rounded-full object-cover" />
+              <Link href="/profile" onClick={handleLinkClick} className="flex items-center gap-3 px-3 py-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800">
+                <Image src={avatarUrl} alt="Avatar" width={36} height={36} className="rounded-full object-cover" />
                 <span className="text-sm text-gray-700 dark:text-gray-300">Profile</span>
               </Link>
 
-              <button
-                onClick={handleLogout}
-                className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600"
-              >
-                Logout
-              </button>
+              <button onClick={handleLogout} className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-red-500 text-white hover:bg-red-600">Logout</button>
             </>
           ) : (
             <>
-              <Link
-                href="/login"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                Login
-              </Link>
-              <Link
-                href="/register"
-                onClick={handleLinkClick}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800"
-              >
-                Register
-              </Link>
+              <Link href="/login" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Login</Link>
+              <Link href="/register" onClick={handleLinkClick} className="block px-3 py-2 rounded-md text-base font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800">Register</Link>
             </>
           )}
 
-          <button
-            onClick={() => {
-              toggleDarkMode();
-              setMobileMenuOpen(false);
-            }}
-            className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700"
-          >
+          <button onClick={() => { toggleDarkMode(); setMobileMenuOpen(false); }} className="w-full text-left px-3 py-2 rounded-md text-base font-medium bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700">
             {darkMode ? "🌙" : "☀️"}
           </button>
         </div>
