@@ -3,7 +3,10 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ['fardheenkp.pythonanywhere.com'],
+    domains: [
+      'fardheenkp.pythonanywhere.com', // your backend
+      'images.pexels.com',            // for Pexels API images
+    ],
   },
 };
 
