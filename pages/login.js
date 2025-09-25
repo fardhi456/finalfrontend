@@ -50,130 +50,67 @@ export default function Login() {
   return (
     <>
       <Navbar />
-      <div className="auth-container">
-        <h1>Login</h1>
-        <form onSubmit={handleSubmit} className="auth-form">
-          <input
-            name="email"
-            placeholder="Email"
-            type="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-            autoComplete="email"
-          />
-          <input
-            name="password"
-            placeholder="Password"
-            type="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            autoComplete="current-password"
-          />
-          <button type="submit">Login</button>
-          {error && <p className="error-msg">{error}</p>}
-        </form>
-        <p style={{ textAlign: "center", marginTop: "1rem" }}>
-          Don’t have an account?{" "}
-          <Link href="/register" className="link">
-            Register here
-          </Link>
-        </p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 px-4">
+        <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 sm:p-10 transition-colors duration-300">
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 text-center mb-8">
+            Login
+          </h1>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
+                Email
+              </label>
+              <input
+                name="email"
+                type="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Enter your email..."
+                required
+                autoComplete="email"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+              />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 dark:text-gray-300 font-medium mb-1">
+                Password
+              </label>
+              <input
+                name="password"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                required
+                autoComplete="current-password"
+                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors duration-300"
+              />
+            </div>
+
+            {error && (
+              <p className="text-red-600 dark:text-red-400 text-center font-medium">
+                {error}
+              </p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-md transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Login
+            </button>
+          </form>
+
+          <p className="text-center text-gray-700 dark:text-gray-300 mt-6 text-sm">
+            Don’t have an account?{" "}
+            <Link href="/register" className="text-blue-600 hover:underline font-medium">
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
-
-      <style jsx>{`
-        :root {
-          --bg-color: #fff;
-          --text-color: #333;
-          --input-border: #ccc;
-          --input-bg: #f9f9f9;
-        }
-
-        @media (prefers-color-scheme: dark) {
-          :root {
-            --bg-color: #1f1f1f;
-            --text-color: #f1f1f1;
-            --input-border: #444;
-            --input-bg: #333;
-          }
-        }
-
-        .auth-container {
-          max-width: 400px;
-          margin: 80px auto 0;
-          padding: 1rem;
-          background-color: var(--bg-color);
-          color: var(--text-color);
-          border-radius: 8px;
-          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-          transition: background-color 0.3s, color 0.3s;
-        }
-
-        h1 {
-          text-align: center;
-          margin-bottom: 1.5rem;
-          font-weight: 700;
-          font-size: 2rem;
-          color: var(--text-color);
-        }
-
-        .auth-form {
-          display: flex;
-          flex-direction: column;
-          gap: 0.8rem;
-          border: 1.5px solid var(--input-border);
-          padding: 1.5rem;
-          border-radius: 10px;
-          background-color: var(--input-bg);
-          transition: border-color 0.3s ease, background-color 0.3s ease;
-        }
-
-        .auth-form input {
-          padding: 0.6rem;
-          border: 1px solid var(--input-border);
-          border-radius: 4px;
-          background-color: var(--bg-color);
-          color: var(--text-color);
-          transition: border-color 0.3s ease, background-color 0.3s ease, color 0.3s ease;
-        }
-
-        .auth-form input:focus {
-          border-color: #0070f3;
-          outline: none;
-          box-shadow: 0 0 5px #0070f3;
-          background-color: var(--bg-color);
-          color: var(--text-color);
-        }
-
-        .auth-form button {
-          background: #0070f3;
-          color: white;
-          border: none;
-          padding: 0.6rem;
-          border-radius: 4px;
-          cursor: pointer;
-          transition: background 0.2s ease-in-out;
-          font-weight: 600;
-        }
-
-        .auth-form button:hover {
-          background: #005bb5;
-        }
-
-        .error-msg {
-          color: #d32f2f;
-          margin-top: 0.5rem;
-          text-align: center;
-          font-weight: 600;
-        }
-
-        .link {
-          color: #0070f3;
-          text-decoration: underline;
-          font-weight: 600;
-        }
-      `}</style>
     </>
   );
 }

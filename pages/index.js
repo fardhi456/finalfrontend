@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import Link from "next/link";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { formatDistanceToNow } from 'date-fns'; // Import date-fns for relative time
+import { formatDistanceToNow } from "date-fns";
 
 export default function Home() {
   const [posts, setPosts] = useState([]);
@@ -69,9 +69,12 @@ export default function Home() {
 
     try {
       if (userLiked) {
-        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`, {
-          headers: { Authorization: `Token ${token}` },
-        });
+        await axios.delete(
+          `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`,
+          {
+            headers: { Authorization: `Token ${token}` },
+          }
+        );
       } else {
         await axios.post(
           `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/likes/`,
@@ -103,9 +106,12 @@ export default function Home() {
     if (!confirm("Are you sure you want to delete this post?")) return;
 
     try {
-      await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
+      await axios.delete(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/posts/${postId}/`,
+        {
+          headers: { Authorization: `Token ${token}` },
+        }
+      );
 
       setPosts(posts.filter((post) => post.id !== postId));
       setComments((prev) => {
@@ -200,47 +206,73 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <main className="container">
-        <h1>Posts Feed</h1>
-        {posts.length === 0 && <p>No posts available yet.</p>}
+      <main className="max-w-3xl mx-auto px-4 py-8">
+        <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
+          📢 Posts Feed
+        </h1>
+
+        {posts.length === 0 && (
+          <p className="text-gray-500 dark:text-gray-400">No posts available yet.</p>
+        )}
 
         {posts.map((post) => (
-          <article key={post.id} className="post-card">
-            <div className="author-box">
-              <Link href={`/users/${post.author.id}`}>
-                <div className="author-link">
-                  <img
-                    src={getAvatarUrl(post.author.avatar)}
-                    alt="Avatar"
-                    className="author-avatar"
-                  />
-                  <span>{post.author.username}</span>
-                </div>
+          <article
+            key={post.id}
+            className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm hover:shadow-md transition-all p-6 mb-6"
+          >
+            {/* Author */}
+            <div className="flex items-center justify-between mb-4">
+              <Link href={`/users/${post.author.id}`} className="flex items-center gap-3">
+                <img
+                  src={getAvatarUrl(post.author.avatar)}
+                  alt="Avatar"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+                <span className="font-semibold text-gray-800 dark:text-gray-100 hover:text-blue-600 dark:hover:text-blue-400">
+                  {post.author.username}
+                </span>
               </Link>
-              <span className="post-time"> • {formatDate(post.created_at)}</span>
+              <span className="text-sm text-gray-500 dark:text-gray-400">
+                {formatDate(post.created_at)}
+              </span>
             </div>
 
-            <h2>{post.title}</h2>
+            {/* Title */}
+            <h2 className="text-xl font-bold mb-3 text-gray-900 dark:text-gray-100">
+              {post.title}
+            </h2>
 
-            {post.image && <img src={post.image} alt="Post" className="post-image" />}
-            <p>{post.content}</p>
+            {/* Image */}
+            {post.image && (
+              <img
+                src={post.image}
+                alt="Post"
+                className="w-full rounded-xl mb-4 shadow-sm"
+              />
+            )}
 
-            <div className="button-row">
+            {/* Content */}
+            <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">
+              {post.content}
+            </p>
+
+            {/* Buttons */}
+            <div className="flex flex-wrap gap-3 mb-4">
               <button
-                className="like-btn"
                 onClick={() => handleLike(post.id)}
+                className="px-4 py-2 rounded-lg bg-pink-500 hover:bg-pink-600 text-white font-medium transition"
               >
                 {post.liked_by_user ? "💖" : "🤍"} {post.likes_count}
               </button>
               <button
-                className="comment-btn"
                 onClick={() => toggleComments(post.id)}
+                className="px-4 py-2 rounded-lg bg-blue-500 hover:bg-blue-600 text-white font-medium transition"
               >
                 💬 Comment
               </button>
               <button
-                className="save-btn"
                 onClick={() => handleSave(post.id)}
+                className="px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-white font-medium transition"
               >
                 🔖 Save
               </button>
@@ -248,11 +280,13 @@ export default function Home() {
               {currentUserId === post.author.id && (
                 <>
                   <Link href={`/edit/${post.id}`}>
-                    <button className="edit-btn">✏️ Edit</button>
+                    <button className="px-4 py-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white font-medium transition">
+                      ✏️ Edit
+                    </button>
                   </Link>
                   <button
-                    className="delete-btn"
                     onClick={() => handleDelete(post.id)}
+                    className="px-4 py-2 rounded-lg bg-red-500 hover:bg-red-600 text-white font-medium transition"
                   >
                     🗑️ Delete
                   </button>
@@ -260,38 +294,45 @@ export default function Home() {
               )}
 
               <button
-                className="copy-btn"
                 onClick={() => handleCopyUserProfile(post.author.id)}
+                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium transition"
               >
                 👤 Copy User Profile
               </button>
               <button
-                className="copy-btn"
                 onClick={() => handleCopyImage(post.id)}
+                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium transition"
               >
                 📷 Copy Image URL
               </button>
               <button
-                className="copy-btn"
                 onClick={() => handleCopyText(post.id)}
+                className="px-4 py-2 rounded-lg bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 font-medium transition"
               >
                 📋 Copy Text
               </button>
             </div>
 
+            {/* Comments */}
             {openComments[post.id] && (
-              <section className="comments-section">
-                <h3>Comments</h3>
+              <section className="mt-4 border-t border-gray-200 dark:border-gray-700 pt-4">
+                <h3 className="font-semibold text-lg mb-3 text-gray-800 dark:text-gray-100">
+                  Comments
+                </h3>
+
                 {comments[post.id] && comments[post.id].length > 0 ? (
-                  <ul>
+                  <ul className="space-y-2 mb-3">
                     {comments[post.id].map((comment) => (
-                      <li key={comment.id}>
+                      <li
+                        key={comment.id}
+                        className="p-2 bg-gray-50 dark:bg-gray-700 rounded-lg text-gray-700 dark:text-gray-200"
+                      >
                         <strong>{comment.author.username}:</strong> {comment.text}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p>No comments yet.</p>
+                  <p className="text-gray-500 dark:text-gray-400 mb-3">No comments yet.</p>
                 )}
 
                 <textarea
@@ -299,10 +340,11 @@ export default function Home() {
                   placeholder="Write a comment..."
                   value={newComment[post.id] || ""}
                   onChange={(e) => handleCommentChange(post.id, e.target.value)}
+                  className="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 focus:ring-2 focus:ring-blue-500 focus:outline-none mb-3"
                 />
                 <button
-                  className="comment-submit-btn"
                   onClick={() => handleCommentSubmit(post.id)}
+                  className="px-4 py-2 rounded-lg bg-green-500 hover:bg-green-600 text-white font-medium transition"
                 >
                   Post Comment
                 </button>
@@ -313,194 +355,6 @@ export default function Home() {
       </main>
 
       <ToastContainer />
-
-      <style jsx>{`
-        .post-card {
-          background-color: #ffffff;
-          border: 1px solid #ddd;
-          padding: 1.5rem;
-          margin-bottom: 2rem;
-          border-radius: 10px;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-          color: #222;
-          box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-        }
-
-        .post-card:hover {
-          background-color: #fff7e6; /* Light cream on hover */
-          transform: scale(1.01);
-        }
-
-        /* Dark Mode */
-        @media (prefers-color-scheme: dark) {
-          .post-card {
-            background-color: #333;
-            color: #f0f0f0;
-            border-color: #555;
-            box-shadow: none;
-          }
-
-          .post-card:hover {
-            background-color: #444;
-            transform: scale(1.01);
-          }
-
-          .author-box {
-            color: #ccc;
-          }
-
-          .post-time {
-            color: #aaa;
-          }
-
-          .button-row button {
-            background: #d18f00;
-          }
-
-          .button-row button:hover {
-            background-color: #c07800;
-          }
-
-          .comments-section {
-            background-color: #444;
-          }
-
-          .comments-section textarea {
-            background-color: #555;
-            color: white;
-            border: 1px solid #666;
-          }
-
-          .comments-section button {
-            background-color: #28a745;
-          }
-
-          .comments-section button:hover {
-            background-color: #218838;
-          }
-        }
-
-        .author-box {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          margin-bottom: 0.75rem;
-          font-size: 1rem;
-          color: #444;
-        }
-
-        .author-link {
-          display: flex;
-          align-items: center;
-          text-decoration: none;
-          color: #0070f3;
-          cursor: pointer;
-        }
-
-        .author-avatar {
-          width: 40px;
-          height: 40px;
-          object-fit: cover;
-          border-radius: 50%;
-          margin-right: 0.5rem;
-        }
-
-        .post-time {
-          color: white;
-          font-size: 0.9rem;
-        }
-
-        h2 {
-          font-size: 1.5rem;
-          margin-top: 1rem;
-          margin-bottom: 0.75rem;
-        }
-
-        .post-image {
-          max-width: 100%;
-          height: auto;
-          margin-bottom: 1rem;
-          border-radius: 8px;
-        }
-
-        .button-row {
-          margin-top: 1rem;
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.75rem;
-        }
-
-        .button-row button {
-          padding: 0.6rem 1.2rem;
-          background: #d18f00;
-          color: white;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: 500;
-          transition: background-color 0.3s;
-        }
-
-        .button-row button:hover {
-          background-color: #c07800;
-        }
-
-        .comment-submit-btn {
-          background-color: #28a745;
-          color: white;
-          border-radius: 5px;
-        }
-
-        .comment-submit-btn:hover {
-          background-color: #218838;
-        }
-
-        .comments-section {
-          margin-top: 1.5rem;
-          padding-top: 1rem;
-          border-top: 1px solid #ddd;
-        }
-
-        .comments-section ul {
-          list-style: none;
-          padding-left: 0;
-          max-height: 200px;
-          overflow-y: auto;
-          margin-bottom: 1rem;
-        }
-
-        .comments-section li {
-          padding: 0.25rem 0;
-          border-bottom: 1px solid #eee;
-        }
-
-        .comments-section textarea {
-          width: 100%;
-          resize: vertical;
-          margin-bottom: 0.5rem;
-          padding: 0.8rem;
-          border-radius: 5px;
-          border: 1px solid #ddd;
-          background-color: #f9f9f9;
-          font-size: 1rem;
-          color: #222;
-        }
-
-        .comments-section button {
-          padding: 0.6rem 1.5rem;
-        }
-
-        @media (max-width: 600px) {
-          .button-row {
-            gap: 0.5rem;
-          }
-
-          .comments-section button {
-            width: 100%;
-          }
-        }
-      `}</style>
-
     </>
   );
 }
