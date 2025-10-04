@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
-import Image from "next/image"; // ✅ Hosting-safe images
+import Image from "next/image";
 
 export default function CreatePost() {
   const router = useRouter();
@@ -13,7 +13,14 @@ export default function CreatePost() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
+  const [isClient, setIsClient] = useState(false);
 
+  // Ensure code only runs on the client (hydration-safe)
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
+  // Handle query image passed in URL (e.g., from AI-generated image redirect)
   useEffect(() => {
     if (!form.image && queryImage) {
       try {
@@ -32,7 +39,7 @@ export default function CreatePost() {
       const file = files[0];
       setForm({ ...form, image: file });
 
-      if (file) {
+      if (file && typeof window !== "undefined") {
         const previewUrl = URL.createObjectURL(file);
         setImagePreview(previewUrl);
       } else {
@@ -43,6 +50,7 @@ export default function CreatePost() {
     }
   };
 
+  // Revoke blob URL on cleanup to prevent memory leak
   useEffect(() => {
     return () => {
       if (imagePreview && form.image instanceof File) {
@@ -172,24 +180,28 @@ export default function CreatePost() {
                 onChange={handleChange}
                 className="w-full text-gray-700 dark:text-gray-300"
               />
-              {imagePreview && (
+              {isClient && imagePreview && (
                 <div className="mt-4 w-full max-h-72 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden flex justify-center items-center">
                   {form.image && typeof form.image === "string" ? (
-                    // Remote or decoded image URL
+                    // Remote image
                     <Image
                       src={imagePreview}
                       alt="Selected Preview"
                       fill
                       className="object-contain"
-                      unoptimized={true} // allow dynamic URLs
+                      unoptimized={true}
                     />
                   ) : (
-                    // Local File blob URL
+                    // Local blob image
                     <img
                       src={imagePreview}
                       alt="Selected Preview"
                       className="object-contain max-h-72"
-                      style={{ maxHeight: "18rem", width: "auto", height: "auto" }}
+                      style={{
+                        maxHeight: "18rem",
+                        width: "auto",
+                        height: "auto",
+                      }}
                     />
                   )}
                 </div>

@@ -13,12 +13,14 @@ export default function EditPost() {
     content: "",
     image: null,
   });
+
   const [type, setType] = useState(null); // "writing" | "artwork" | "both"
   const [error, setError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [imagePreview, setImagePreview] = useState(null);
   const [originalImage, setOriginalImage] = useState(null);
+  const [isClient, setIsClient] = useState(false); // 🆕
 
   const inferType = (imageUrl, contentText) => {
     const hasImage = Boolean(imageUrl);
@@ -27,6 +29,11 @@ export default function EditPost() {
     if (hasImage) return "artwork";
     return "writing";
   };
+
+  // 🆕 Ensure hydration-safe rendering
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("auth_token");
@@ -62,7 +69,7 @@ export default function EditPost() {
       const file = files[0];
       setForm({ ...form, image: file });
 
-      if (file) {
+      if (file && typeof window !== "undefined") {
         const previewUrl = URL.createObjectURL(file);
         setImagePreview(previewUrl);
       } else {
@@ -73,9 +80,10 @@ export default function EditPost() {
     }
   };
 
+  // 🧼 Clean up blob preview URLs
   useEffect(() => {
     return () => {
-      if (imagePreview && form.image) {
+      if (imagePreview && form.image instanceof File) {
         URL.revokeObjectURL(imagePreview);
       }
     };
@@ -102,11 +110,9 @@ export default function EditPost() {
 
     const formData = new FormData();
     formData.append("title", form.title);
-
     if (form.content?.trim()) {
       formData.append("content", form.content);
     }
-
     if (form.image) {
       formData.append("image", form.image);
     }
@@ -224,7 +230,7 @@ export default function EditPost() {
               />
 
               {/* Image Preview */}
-              {imagePreview && (
+              {isClient && imagePreview && (
                 <div className="mt-4 w-full max-h-64 rounded-lg border dark:border-gray-700 shadow-md overflow-hidden flex justify-center items-center bg-gray-100 dark:bg-gray-900">
                   {form.image instanceof File ? (
                     <img
@@ -239,11 +245,9 @@ export default function EditPost() {
                       alt="Existing Image"
                       width={600}
                       height={400}
-                      style={{ objectFit: "contain" }}
-                      className="max-h-64 max-w-full"
+                      className="object-contain max-h-64 w-auto"
                       unoptimized={true}
                     />
-
                   )}
                 </div>
               )}
