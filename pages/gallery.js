@@ -126,7 +126,9 @@ export default function Gallery() {
           {loading ? (
             <p className="text-center text-lg animate-pulse">Loading gallery...</p>
           ) : filtered.length === 0 ? (
-            <p className="text-center text-gray-500">No artworks found for "{query}"</p>
+            <p className="text-center text-gray-500">
+              No artworks found for &quot;{query}&quot;
+            </p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filtered.map((p) => (
