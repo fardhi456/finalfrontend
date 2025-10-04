@@ -14,7 +14,6 @@ export default function Home() {
   const [newComment, setNewComment] = useState({});
   const [openComments, setOpenComments] = useState({});
 
-  // ✅ Fetch posts function wrapped with useCallback
   const fetchPosts = useCallback(async (token) => {
     try {
       const headers = token ? { Authorization: `Token ${token}` } : {};
@@ -48,7 +47,7 @@ export default function Home() {
     }
 
     fetchPosts(token);
-  }, [fetchPosts]); // ✅ Added fetchPosts to dependency array
+  }, [fetchPosts]);
 
   const toggleComments = (postId) => {
     setOpenComments((prev) => ({ ...prev, [postId]: !prev[postId] }));
@@ -210,7 +209,7 @@ export default function Home() {
                     src={getAvatarUrl(post.author.avatar)}
                     alt="Avatar"
                     fill
-                    unoptimized 
+                    unoptimized
                     className="object-cover"
                   />
                 </div>
@@ -230,15 +229,17 @@ export default function Home() {
 
             {/* Image */}
             {post.image && (
-              <div className="relative w-full h-64 mb-4 rounded-xl overflow-hidden shadow-sm">
+              <div className="relative w-full h-[400px] mb-4 rounded-xl overflow-hidden shadow-sm">
                 <Image
                   src={post.image}
                   alt="Post"
                   fill
-                  className="object-cover rounded-xl"
+                  className="object-contain rounded-xl"
+                  unoptimized
                 />
               </div>
             )}
+
 
             {/* Content */}
             <p className="text-gray-700 dark:text-gray-300 mb-4 leading-relaxed">

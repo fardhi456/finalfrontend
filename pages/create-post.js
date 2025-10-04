@@ -13,16 +13,16 @@ export default function CreatePost() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploading, setUploading] = useState(false);
   const [imagePreview, setImagePreview] = useState(null);
-  const [decodedImage, setDecodedImage] = useState(null);
 
   useEffect(() => {
     if (!form.image && queryImage) {
       try {
         const decoded = decodeURIComponent(queryImage);
-        setDecodedImage(decoded);
         setImagePreview(decoded);
         setForm((prev) => ({ ...prev, image: decoded }));
-      } catch {}
+      } catch {
+        // ignore errors
+      }
     }
   }, [queryImage, form.image]);
 
@@ -173,14 +173,25 @@ export default function CreatePost() {
                 className="w-full text-gray-700 dark:text-gray-300"
               />
               {imagePreview && (
-                <div className="mt-4 w-full max-h-72 relative rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden">
-                  <Image
-                    src={imagePreview}
-                    alt="Selected Preview"
-                    fill
-                    className="object-contain"
-                    unoptimized={true} // ✅ allow local or dynamic URLs
-                  />
+                <div className="mt-4 w-full max-h-72 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm overflow-hidden flex justify-center items-center">
+                  {form.image && typeof form.image === "string" ? (
+                    // Remote or decoded image URL
+                    <Image
+                      src={imagePreview}
+                      alt="Selected Preview"
+                      fill
+                      className="object-contain"
+                      unoptimized={true} // allow dynamic URLs
+                    />
+                  ) : (
+                    // Local File blob URL
+                    <img
+                      src={imagePreview}
+                      alt="Selected Preview"
+                      className="object-contain max-h-72"
+                      style={{ maxHeight: "18rem", width: "auto", height: "auto" }}
+                    />
+                  )}
                 </div>
               )}
             </div>

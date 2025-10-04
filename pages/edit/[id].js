@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import Navbar from "../../components/Navbar";
-import Image from "next/image"; // ✅ Hosting-safe images
+import Image from "next/image";
 
 export default function EditPost() {
   const router = useRouter();
@@ -95,11 +95,7 @@ export default function EditPost() {
       return;
     }
 
-    if (
-      (type === "artwork" || type === "both") &&
-      !form.image &&
-      !originalImage
-    ) {
+    if ((type === "artwork" || type === "both") && !form.image && !originalImage) {
       setError("An image is required for this post type.");
       return;
     }
@@ -147,7 +143,7 @@ export default function EditPost() {
   };
 
   const handleCancel = () => {
-    router.push("/"); // Redirect to homepage or previous page
+    router.push("/");
   };
 
   if (type === null) {
@@ -226,21 +222,35 @@ export default function EditPost() {
                   dark:file:bg-gray-700 dark:file:text-gray-200 dark:hover:file:bg-gray-600
                 "
               />
+
+              {/* Image Preview */}
               {imagePreview && (
-                <div className="mt-4 w-full max-h-64 relative rounded-lg border dark:border-gray-700 shadow-md overflow-hidden">
-                  <Image
-                    src={imagePreview}
-                    alt="Preview"
-                    fill
-                    className="object-contain"
-                    unoptimized={true} // ✅ Works with blob or external URLs
-                  />
+                <div className="mt-4 w-full max-h-64 rounded-lg border dark:border-gray-700 shadow-md overflow-hidden flex justify-center items-center bg-gray-100 dark:bg-gray-900">
+                  {form.image instanceof File ? (
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="object-contain max-h-64 w-auto"
+                      style={{ maxHeight: "16rem" }}
+                    />
+                  ) : (
+                    <Image
+                      src={imagePreview}
+                      alt="Existing Image"
+                      width={600}
+                      height={400}
+                      style={{ objectFit: "contain" }}
+                      className="max-h-64 max-w-full"
+                      unoptimized={true}
+                    />
+
+                  )}
                 </div>
               )}
             </div>
           )}
 
-          {/* Upload progress */}
+          {/* Upload Progress */}
           {uploading && (
             <div className="flex items-center gap-4">
               <progress
@@ -254,7 +264,7 @@ export default function EditPost() {
             </div>
           )}
 
-          {/* Error */}
+          {/* Error Message */}
           {error && (
             <p className="text-red-600 dark:text-red-400 text-sm">{error}</p>
           )}
