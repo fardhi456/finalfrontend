@@ -210,6 +210,7 @@ export default function Home() {
                     src={getAvatarUrl(post.author.avatar)}
                     alt="Avatar"
                     fill
+                    unoptimized 
                     className="object-cover"
                   />
                 </div>

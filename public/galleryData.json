@@ -1,0 +1,140 @@
+[
+  {
+    "id": 1,
+    "title": "Inter Training College 5s Football 24",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576014/football_bxzllp.jpg"
+  },
+  {
+    "id": 2,
+    "title": "KTET Workshop 2025",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576011/ktet_25_xoztap.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Moral session 2025",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576009/Morelsession_wn13l0.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Induction programme 1 2025-27 Batch",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576004/inductionProgramm_yi9q7h.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Campus walk 2025",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576004/campusWalk_xrwpur.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Science club inauguration 2025",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575999/scienceClubInagraution_o7337e.jpg"
+  },
+  {
+    "id": 7,
+    "title": "NAAC Peer team visit to accredit JNTC",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575994/NAACPeerTeam_routcv.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Internship",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575993/ph_internship_4__bjw5xp.jpg"
+  },
+  {
+    "id": 9,
+    "title": "Biriyani Challange",
+    "category": "Activities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575992/biri1_tlk3yv.jpg"
+  },
+  {
+    "id": 10,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576005/photography6_poam2c.jpg"
+  },
+  {
+    "id": 11,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576003/photography7_ucvrvl.jpg"
+  },
+  {
+    "id": 12,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576002/photography5_blx5di.jpg"
+  },
+  {
+    "id": 13,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576001/photography4_xfetyn.jpg"
+  },
+  {
+    "id": 14,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575999/photography1_ksrxap.jpg"
+  },
+  {
+    "id": 15,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575997/photography3_cvjcwh.jpg"
+  },
+  {
+    "id": 16,
+    "title": "Campus View 2025",
+    "category": "CollagePhotography",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759575997/photography2_g5fk3q.jpg"
+  },
+  {
+    "id": 17,
+    "title": "Ladies Hostel",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576012/ladieshostel_gvd2sh.webp"
+  },
+  {
+    "id": 18,
+    "title": "Masjid",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576014/Masjid_w5evly.jpg"
+  },
+  {
+    "id": 19,
+    "title": "Collage Gate",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576011/gate_afhr97.webp"
+  },
+  {
+    "id": 20,
+    "title": "Canteen",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576010/Canteen_e6gpxw.webp"
+  },
+  {
+    "id": 21,
+    "title": "ADMINISTRATIVE BLOCK",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576010/ADMINISTRATIVEBLOCK_uruoun.jpg"
+  },
+  {
+    "id": 22,
+    "title": "Auditorium",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576009/auditorium_xiqatj.jpg"
+  },
+  {
+    "id": 23,
+    "title": "Arts Collage",
+    "category": "Facilities",
+    "image": "https://res.cloudinary.com/dj2kcebbd/image/upload/v1759576009/ArtsCollage_jguw4s.jpg"
+  }
+]

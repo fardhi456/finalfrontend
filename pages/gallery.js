@@ -1,55 +1,57 @@
-import { useState } from "react";
-import axios from "axios";
+"use client";
+import { useEffect, useState } from "react";
+import Image from "next/image";
 import Navbar from "../components/Navbar";
-import Image from "next/image"; // ✅ Optimized images
+import { Search } from "lucide-react"; // ✅ for search icon
 
 export default function Gallery() {
+  const [query, setQuery] = useState("");
   const [photos, setPhotos] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [query, setQuery] = useState("art");
-  const [error, setError] = useState(null);
+  const [filtered, setFiltered] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("All");
 
-  // Fetch photos from Pexels API
-  const fetchPhotos = async () => {
-    const trimmedQuery = query.trim();
-    if (!trimmedQuery) {
-      setPhotos([]);
-      setError("Please enter a search term");
-      return;
+  const categories = ["All", "Activities", "Facilities", "CollagePhotography"];
+
+  useEffect(() => {
+    const loadGallery = async () => {
+      try {
+        const res = await fetch("/galleryData.json"); // from public folder
+        const data = await res.json();
+        setPhotos(data);
+        setFiltered(data);
+      } catch (err) {
+        console.error("Failed to load gallery", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadGallery();
+  }, []);
+
+  // 🧠 Filter by category + search
+  useEffect(() => {
+    let result = photos;
+
+    if (activeCategory !== "All") {
+      result = result.filter(
+        (p) => p.category.toLowerCase() === activeCategory.toLowerCase()
+      );
     }
 
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await axios.get("https://api.pexels.com/v1/search", {
-        headers: {
-          Authorization: process.env.NEXT_PUBLIC_PEXELS_API_KEY,
-        },
-        params: {
-          query: trimmedQuery,
-          per_page: 20,
-          orientation: "landscape",
-        },
-      });
-      setPhotos(res.data.photos);
-    } catch (err) {
-      console.error("Error fetching photos from Pexels", err);
-      setError("Failed to fetch photos. Please try again later.");
-    } finally {
-      setLoading(false);
+    const q = query.trim().toLowerCase();
+    if (q) {
+      result = result.filter((p) =>
+        p.title.toLowerCase().includes(q)
+      );
     }
-  };
 
-  // Handle image click to display in full view
-  const handleImageClick = (imageUrl) => {
-    setSelectedImage(imageUrl);
-  };
+    setFiltered(result);
+  }, [query, activeCategory, photos]);
 
-  // Remove the selected image (close the full view)
-  const handleRemoveImage = () => {
-    setSelectedImage(null);
-  };
+  const handleImageClick = (url) => setSelectedImage(url);
+  const handleRemoveImage = () => setSelectedImage(null);
 
   return (
     <>
@@ -76,61 +78,73 @@ export default function Gallery() {
         </div>
       )}
 
-      {/* Main Container */}
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-300 px-6 py-12">
+      {/* Main Content */}
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 text-gray-900 dark:text-gray-100 px-6 py-12 transition-colors duration-300">
         <div className="max-w-6xl mx-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-indigo-600 dark:text-indigo-400">
-            🖼️ Gallery
+          <h1 className="text-4xl md:text-5xl font-extrabold text-center mb-10 text-indigo-600 dark:text-indigo-400 tracking-tight">
+            ✨ College Art & Photography
           </h1>
 
-          {/* Search Bar */}
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 mb-8">
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search for photos, artworks, etc."
-              onKeyDown={(e) => {
-                if (e.key === "Enter") fetchPhotos();
-              }}
-              className="w-full md:w-96 px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 
-              bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm 
-              focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            />
-            <button
-              onClick={fetchPhotos}
-              disabled={!query.trim()}
-              className="px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white font-medium rounded-lg shadow-md transition disabled:opacity-50 disabled:cursor-not-allowed dark:bg-indigo-500 dark:hover:bg-indigo-600"
-            >
-              🔍 Search
-            </button>
+          {/* 🔍 Search + Category Buttons */}
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6 mb-10">
+            {/* Search Bar */}
+            <div className="relative w-full md:w-96">
+              <Search
+                size={20}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              />
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search artworks..."
+                className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-700 
+                bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 shadow-sm 
+                focus:outline-none focus:ring-2 focus:ring-indigo-500 transition"
+              />
+            </div>
+
+            {/* Category Buttons */}
+            <div className="flex flex-wrap justify-center gap-3">
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(cat)}
+                  className={`px-4 py-2 rounded-full font-medium shadow-sm transition-all duration-200 ${
+                    activeCategory === cat
+                      ? "bg-indigo-600 text-white shadow-md"
+                      : "bg-gray-200 dark:bg-gray-700 hover:bg-indigo-500 hover:text-white dark:hover:bg-indigo-500"
+                  }`}
+                >
+                  {cat}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <p className="text-red-500 text-center font-medium mb-6">{error}</p>
-          )}
-
-          {/* Loading State */}
+          {/* Gallery Grid */}
           {loading ? (
-            <p className="text-center text-lg animate-pulse">Loading photos...</p>
+            <p className="text-center text-lg animate-pulse">Loading gallery...</p>
+          ) : filtered.length === 0 ? (
+            <p className="text-center text-gray-500">No artworks found for "{query}"</p>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {photos.map((photo) => (
+              {filtered.map((p) => (
                 <div
-                  key={photo.id}
-                  className="relative cursor-pointer group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition"
-                  onClick={() => handleImageClick(photo.src.original)}
+                  key={p.id}
+                  className="relative cursor-pointer group overflow-hidden rounded-xl shadow-md hover:shadow-2xl transition-transform duration-300 hover:scale-[1.02]"
+                  onClick={() => handleImageClick(p.image)}
                 >
                   <Image
-                    src={photo.src.medium}
-                    alt={photo.photographer}
+                    src={p.image}
+                    alt={p.title}
                     width={400}
                     height={300}
-                    className="w-full h-60 object-cover rounded-lg transform group-hover:scale-105 transition duration-300"
+                    className="w-full h-60 object-cover rounded-xl transform group-hover:scale-110 transition duration-500"
                   />
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center text-white font-semibold text-lg transition">
-                    View Full
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-500 flex flex-col justify-end p-4">
+                    <h3 className="text-lg font-semibold text-white">{p.title}</h3>
+                    <p className="text-sm text-gray-200">{p.category}</p>
                   </div>
                 </div>
               ))}

@@ -132,6 +132,7 @@ export default function Profile() {
                 alt="Profile"
                 layout="fill"
                 objectFit="cover"
+                unoptimized 
                 className="rounded-full ring-4 ring-blue-500 shadow-md"
               />
             </div>
